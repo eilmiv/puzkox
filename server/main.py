@@ -5,3 +5,5 @@ if __name__ == "__main__":
 
     mycommm = Communication(7694)
     mycommm.start()
+    while True:
+        pass
