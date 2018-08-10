@@ -9,4 +9,7 @@ class Player:
     def serealize (self):
         return "{}!{}!{}!{}".format(self.possition.x,self.possition.y, self.health, self.energy, self.charges)
 
+    def update(self):
+        pass
+
 

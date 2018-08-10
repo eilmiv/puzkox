@@ -1,27 +1,32 @@
 import socket
+from threading import Thread
 
 class Communication:
     def __init__(self, ip, port):
         self.ip = ip
         self.port = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.myIP = socket.gethostbyname(socket.gethostname())
+        self.thread = Thread(target=self.receive)
+        self.thread.daemon = True
         self.messages = []
 
     def connect(self):
         self.socket.connect((self.ip, self.port))
-        self.socket.setblocking(False)
-        self.socket.send(bytes("Hello:{}".format(self.myIP), 'utf-8'))
+        self.socket.send(b'Hello\n')
+        self.thread.start()
 
     def send(self, message):
         self.socket.send(message)
 
-    def update(self):
-        result = self.socket.recv(8191)
-        if result:
-            self.process_message(result)
+    def receive(self):
+        while True:
+            result = self.socket.recv(8191)
+            if result:
+                self.process_message(result)
 
     def process_message(self, message):
+        print(message)
+        #todo
         self.messages.append(message)
 
     def pop(self):

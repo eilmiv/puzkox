@@ -1,9 +1,12 @@
-from Communication import Communication
+from server.Communication import Communication, CommunicationAlt
+from time import sleep
 
 if __name__ == "__main__":
     print("server")
 
-    mycommm = Communication(7694)
-    mycommm.start()
+    com = CommunicationAlt(7694)
+    com.start()
     while True:
-        pass
+        com.update()
+        print("hi")
+        sleep(2)
