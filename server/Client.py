@@ -1,2 +1,1 @@
 class Client:
-    pass
