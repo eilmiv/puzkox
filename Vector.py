@@ -15,13 +15,19 @@ class Vector:
         return Vector(self.x - other.x, self.y - other.y)
 
     def __mul__(self, other):
-        return (self.x * other.x + self.y * other.y)
+        if type(other) == Vector:
+            return (self.x * other.x + self.y * other.y)
+        else:
+            return Vector(self.x * other, self.y * other)
 
     def __neg__(self):
         return Vector(-self.x, -self.y)
 
     def __abs__(self):
         return math.sqrt(self.x**2 + self.y**2)
+
+    def __truediv__(self, other):
+        return Vector(self.x / other, self.y / other)
 
     def abs_q(self):
         return self.x ** 2 + self.y **2
@@ -38,4 +44,4 @@ class Vector:
 if __name__ == "__main__":
     Vector1 = Vector(1,0)
     Vector2 = Vector(0.5,0.5)
-    print((Vector1.ang(Vector2))/math.pi)
+    print(Vector1 / 0.5)

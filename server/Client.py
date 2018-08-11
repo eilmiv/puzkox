@@ -14,8 +14,9 @@ class Client:
         self.thread.start()
         self.exist = True
         self.commands = []
-        self.position = Vector()
+        self.position = Vector(7,8)
         self.send_message = b""
+        self.size = Vector()
 
 
     def communicate(self):
@@ -40,13 +41,29 @@ class Client:
             message = json.loads(message)
             self.commands.append(message)
 
-    def send(self, send_message):
-        send_message = json.dumps(send_message)
-        send_message = bytes(send_message, "ASCII")
-        self.send_message += send_message + b"\n"
+    def handle_event (self, request, **message):
+        if request == "size":
+            self.size = Vector (message["width"], message["height"])
+            print(self.size)
+        if request == "key_down":
+             print(message['value'])
+        if request == "ping":
+            self.send("root", "ping-answer", True, time=message["time"])
+
+
+    def send(self, target, request, auto_flush=False, **kwargs):
+        kwargs ["target"] = target
+        kwargs ["request"] = request
+        kwargs = json.dumps(kwargs)
+        kwargs = bytes(kwargs, "ASCII")
+        self.send_message += kwargs + b"\n"
+        if auto_flush:
+            self.flush()
+
 
     def flush(self):
-        if self.exist:
+
+        if self.exist and self.send_message != b"":
             self.socket.send(self.send_message)
             self.send_message = b""
 
@@ -55,3 +72,9 @@ class Client:
 
     def pop(self):
         return self.commands.pop(0)
+
+    def send_coordinates(self):
+        self.send("view_window", "update", key="location", x=self.position.x, y=self.position.y)
+
+
+
