@@ -1,6 +1,7 @@
 import socket
 from threading import Thread
 from ByteStream import ByteStream
+
 import json
 
 
@@ -20,9 +21,9 @@ class Communication:
         self.socket.send(b'Hello\n')
         self.thread.start()
 
-    def send(self, target, type, auto_flush=False, **content):
+    def send(self, target, request, auto_flush=False, **content):
         content['target'] = target
-        content['type'] = type
+        content['request'] = request
         j = json.dumps(content)
         b = bytes(j, "ASCII")
         self.send_message += b + b'\n'
@@ -32,6 +33,7 @@ class Communication:
     def flush(self):
         if self.send_message != b'':
             self.socket.send(self.send_message)
+            #print(self.send_message)
             self.send_message = b''
 
     def receive(self):
