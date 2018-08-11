@@ -14,10 +14,6 @@ class Communication:
     def start(self):
         self.accept_thread.start()
 
-    def update(self):
-        for c in self.clients:
-            c.update()
-
     def accept_connections(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.bind(('', self.port))

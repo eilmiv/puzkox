@@ -49,3 +49,9 @@ class Client:
         if self.exist:
             self.socket.send(self.send_message)
             self.send_message = b""
+
+    def has_message(self):
+        return len(self.commands) > 0
+
+    def pop(self):
+        return self.commands.pop(0)
