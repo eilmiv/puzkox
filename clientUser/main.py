@@ -6,8 +6,9 @@ martinIP = "192.168.2.102"
 
 if __name__ == "__main__":
     print("client")
-    com = Communication("localhost", 7694)
+    com = Communication(tobiasIP, 7694)
     com.connect()
     while True:
-        com.send(b'abc\n')
+        com.send({"type":"test", "value":42})
+        com.flush()
         sleep(4)
