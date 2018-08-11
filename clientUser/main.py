@@ -8,6 +8,7 @@ from clientUser.ViewWindow import ViewWindow
 tobiasIP = "192.168.2.106"
 martinIP = "192.168.2.102"
 
+useIP = "localhost"
 
 if __name__ == "__main__":
     print("client")
@@ -47,7 +48,7 @@ if __name__ == "__main__":
     commanders.append(vew_window)
 
     # communication init
-    com = Communication(tobiasIP, 7694)
+    com = Communication(useIP, 7694)
     com.connect()
     com.send('client', 'size', width=vew_window.width, height=vew_window.height)
     com.flush()

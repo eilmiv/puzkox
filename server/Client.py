@@ -60,11 +60,13 @@ class Client:
         if auto_flush:
             self.flush()
 
-
     def flush(self):
-
         if self.exist and self.send_message != b"":
-            self.socket.send(self.send_message)
+            try:
+                self.socket.send(self.send_message)
+            except ConnectionResetError:
+                print("client at {} closed connection".format(self.adr))
+                self.exist = False
             self.send_message = b""
 
     def has_message(self):
