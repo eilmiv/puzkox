@@ -20,14 +20,19 @@ class Communication:
         self.socket.send(b'Hello\n')
         self.thread.start()
 
-    def send(self, message):
-        j = json.dumps(message)
+    def send(self, target, type, auto_flush=False, **content):
+        content['target'] = target
+        content['type'] = type
+        j = json.dumps(content)
         b = bytes(j, "ASCII")
         self.send_message += b + b'\n'
+        if auto_flush:
+            self.flush()
 
     def flush(self):
-        self.socket.send(self.send_message)
-        self.send_message = b''
+        if self.send_message != b'':
+            self.socket.send(self.send_message)
+            self.send_message = b''
 
     def receive(self):
         while True:
@@ -40,7 +45,6 @@ class Communication:
     def process_message(self, message):
         s = str(message, 'ASCII')
         d = json.loads(s)
-        print(d)
         self.messages.append(d)
 
     def pop(self):
