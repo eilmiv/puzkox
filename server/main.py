@@ -1,10 +1,10 @@
-from server.Communication import Communication, CommunicationAlt
+from server.Communication import Communication
 from time import sleep
 
 if __name__ == "__main__":
     print("server")
 
-    com = CommunicationAlt(7694)
+    com = Communication(7694)
     com.start()
     while True:
         com.update()

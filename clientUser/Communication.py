@@ -1,6 +1,7 @@
 import socket
 from threading import Thread
 
+
 class Communication:
     def __init__(self, ip, port):
         self.ip = ip
@@ -26,8 +27,10 @@ class Communication:
 
     def process_message(self, message):
         print(message)
-        #todo
         self.messages.append(message)
 
     def pop(self):
         return self.messages.pop(0)
+
+    def has_next(self):
+        return len(self.messages) > 0
