@@ -1,5 +1,7 @@
 from ByteStream import ByteStream
 from threading import Thread
+from Vector import Vector
+import json
 
 
 class Client:
@@ -12,6 +14,9 @@ class Client:
         self.thread.start()
         self.exist = True
         self.commands = []
+        self.position = Vector()
+        self.send_message = b""
+
 
     def communicate(self):
         while True:
@@ -30,8 +35,17 @@ class Client:
     def handle_message(self, message):
         if message == b'Hello':
             print("client at " + str(self.adr))
-        self.commands.append(message)
+        else:
+            message = str(message, "ASCII")
+            message = json.loads(message)
+            self.commands.append(message)
 
-    def send(self, message):
+    def send(self, send_message):
+        send_message = json.dumps(send_message)
+        send_message = bytes(send_message, "ASCII")
+        self.send_message += send_message + b"\n"
+
+    def flush(self):
         if self.exist:
-            self.socket.send(message)
+            self.socket.send(self.send_message)
+            self.send_message = b""
