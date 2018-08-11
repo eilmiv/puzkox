@@ -8,7 +8,7 @@ from clientUser.ViewWindow import ViewWindow
 tobiasIP = "192.168.2.106"
 martinIP = "192.168.2.102"
 
-useIP = "localhost"
+useIP = tobiasIP
 
 if __name__ == "__main__":
     print("client")

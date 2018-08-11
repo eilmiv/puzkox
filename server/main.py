@@ -19,8 +19,7 @@ if __name__ == "__main__":
                 if message["target"] == "root":
                     client.handle_event(**message)
 
-        if len(com.clients)>0:
-            client1 = com.clients[0]
-            client1.send_coordinates()
-            client1.flush()
+        for client in com.clients:
+            client.send_coordinates()
+            client.flush()
 
