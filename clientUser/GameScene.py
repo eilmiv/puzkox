@@ -1,7 +1,8 @@
 class GameScene:
-    def __init__(self, canvas):
+    def __init__(self, canvas, images):
         self.canvas = canvas
-        self.test_image = canvas.pygame.image.load("Images/pixel.bmp")
+        self.images = images
+        self.test_image = canvas.pygame.image.load("Images/car_0_0.bmp")
         self.test_image = self.test_image.convert_alpha()
 
     def update(self):

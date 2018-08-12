@@ -7,6 +7,7 @@ if __name__ == "__main__":
     com = Communication(7694)
     com.start()
     while True:
+        sleep(0.5)
         for client in com.clients:
             while client.has_message():
                 message = client.pop()

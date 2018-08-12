@@ -5,6 +5,7 @@ from time import time
 from clientUser.Communication import Communication
 from clientUser.ViewWindow import ViewWindow
 from clientUser.GameScene import GameScene
+from clientUser.ImageProvider import ImageProvider
 
 tobiasIP = "192.168.2.106"
 martinIP = "192.168.2.102"
@@ -55,7 +56,14 @@ if __name__ == "__main__":
     com.flush()
 
     # scene state init
-    scene = GameScene(vew_window)
+    images = ImageProvider(pygame, "Images")
+    scene = GameScene(vew_window, images)
+    print("car: " + str(images.car_images))
+    print("grass: " + str(images.grass_images))
+    print("house: " + str(images.house_images))
+    print("street: " + str(images.street_images))
+    print("biome report: {}".format(images.biome_report()))
+    print("car report: {}".format(images.car_report()))
 
     # init timing
     clock = pygame.time.Clock()
