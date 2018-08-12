@@ -57,13 +57,8 @@ if __name__ == "__main__":
 
     # scene state init
     images = ImageProvider(pygame, "Images")
+    images.scale(512, 32, 64)
     scene = GameScene(vew_window, images)
-    print("car: " + str(images.car_images))
-    print("grass: " + str(images.grass_images))
-    print("house: " + str(images.house_images))
-    print("street: " + str(images.street_images))
-    print("biome report: {}".format(images.biome_report()))
-    print("car report: {}".format(images.car_report()))
 
     # init timing
     clock = pygame.time.Clock()
@@ -89,6 +84,7 @@ if __name__ == "__main__":
                 running = False
             elif event.type == VIDEORESIZE:
                 vew_window.resize(event.dict['size'])
+                # rescale images
             elif event.type == KEYDOWN:
                 handle_key(event.dict['unicode'])
 
