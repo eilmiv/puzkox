@@ -25,6 +25,12 @@ class Communication:
     def create_client(self, soc, adr):
         self.clients.append(Client(soc, adr))
 
+    def send_all(self, target, request, auto_flush=False, **kwargs):
+        for client in self.clients:
+            client.send(target, request, auto_flush, **kwargs)
+
+
+
 
 
 

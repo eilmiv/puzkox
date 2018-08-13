@@ -2,29 +2,34 @@ from ByteStream import ByteStream
 from threading import Thread
 from Vector import Vector
 import json
+import math
+from server import options
 
 
 class Client:
     def __init__(self, socket, adr):
+        self.area = 20
         self.socket = socket
         self.adr = adr
         self.stream = ByteStream()
+        self.exist = True
+        self.commands = []
+        self.position = Vector(0,0)
+        self.send_message = b""
+        self.size = Vector()
+        self.send("image_provider", "sizes", block_x=1, block_y=1, Player_size.x, car_y=0.5)
+        self.player=None
+
         self.thread = Thread(target=self.communicate)
         self.thread.daemon = True
         self.thread.start()
-        self.exist = True
-        self.commands = []
-        self.position = Vector(7,8)
-        self.send_message = b""
-        self.size = Vector()
-
 
     def communicate(self):
         while True:
             try:
                 msg = self.socket.recv(2048)
             except ConnectionResetError:
-                print("client at {} closed connection".format(self.adr))
+                print("client at {} closed connection - communicate".format(self.adr))
                 break
 
             if msg:
@@ -44,7 +49,15 @@ class Client:
     def handle_event (self, request, **message):
         if request == "size":
             self.size = Vector (message["width"], message["height"])
-            print(self.size)
+            a = message["width"] / message["height"]
+
+            y = math.sqrt(self.area / a)
+            x = a*y
+            print("y=",y)
+            print("x=",x)
+            print((x / y)/a)
+            self.send("view_window", "update", key="size", x=x, y=y)
+            self.send("root", "size", x=x, y=y)
         if request == "key_down":
              print(message['value'])
         if request == "ping":
@@ -52,8 +65,8 @@ class Client:
 
 
     def send(self, target, request, auto_flush=False, **kwargs):
-        kwargs ["target"] = target
-        kwargs ["request"] = request
+        kwargs["target"] = target
+        kwargs["request"] = request
         kwargs = json.dumps(kwargs)
         kwargs = bytes(kwargs, "ASCII")
         self.send_message += kwargs + b"\n"
@@ -65,7 +78,7 @@ class Client:
             try:
                 self.socket.send(self.send_message)
             except ConnectionResetError:
-                print("client at {} closed connection".format(self.adr))
+                print("client at {} closed connection - flush".format(self.adr))
                 self.exist = False
             self.send_message = b""
 

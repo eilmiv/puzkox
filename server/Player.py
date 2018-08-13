@@ -5,7 +5,6 @@ from server.gameobject import gameobject
 class Player (gameobject):
     def __init__(self, position, is_circle, angle, size, offset, description):
         super(Player, self).__init__(self, position, is_circle, angle, size, offset, description)
-        self.possition = Vector()
         self.health = 0
         self.energy = 0
         self.charges = 0

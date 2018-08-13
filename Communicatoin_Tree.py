@@ -1,0 +1,15 @@
+#server --> client
+root
+    size
+view_window     = "view_window"
+image_provider  = "image_provider"
+
+#client --> server
+client          = 'client'
+root            = 'root'
+
+
+
+#server --> client
+sizes       = "sizes"   #
+update      = "update"  #

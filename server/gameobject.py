@@ -16,6 +16,13 @@ class gameobject:
     def set_position (self, new_position):
         self._position = new_position
 
+    def colliding(self, other):
+        if self.is_circle and other.is_cicrcle:
+            return abs(self.position - other.position) >= (self.size.x + other.size.x) / 2
+        elif not self.is_circle and not other.is_cicrcle:
+            return (self.position.x < other.position.x + other.size.x and self.position.x + self.size.x > other.position.x) \
+            and \
+            (self.position.y < other.position.y + other.size.y and self.position.y + self.size.y > other.position.y)
 
 
 
