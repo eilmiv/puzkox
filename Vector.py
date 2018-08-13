@@ -35,6 +35,9 @@ class Vector:
     def ang (self, ohter):
         return math.acos(self*ohter/(abs(self)*abs(ohter)))
 
+    def tuple(self):
+        return self.x, self.y
+
 
 
 

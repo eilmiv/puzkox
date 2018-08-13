@@ -6,6 +6,7 @@ class ViewWindow(Commander):
     def __init__(self):
         super(ViewWindow, self).__init__()
         self.location = Vector()
+        self.game_size = Vector(500, 300)
         self.width = 500
         self.height = 300
         self.display = None
@@ -43,8 +44,13 @@ class ViewWindow(Commander):
     def update(self, pygame):
         pygame.display.update()
 
-    def draw_image(self, image):
-        self.display.blit(image, image.get_rect())
+    def screen_coordinates(self, vec):
+        return Vector(vec.x / self.game_size.x * self.width, vec.y / self.game_size.y * self.height)
+
+    def draw_image(self, image, pos):
+        rect = image.get_rect()
+        rect.center = self.screen_coordinates(pos-self.location).tuple()
+        self.display.blit(image, rect)
 
     def status_text(self, text):
         if self.font:

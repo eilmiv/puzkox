@@ -1,6 +1,8 @@
 import os
 from bisect import bisect_left
 
+from Vector import Vector
+
 class ImageProvider:
     def __init__(self, pygame, path):
         self.pygame = pygame
@@ -13,6 +15,8 @@ class ImageProvider:
         self.original_car_images = []
         self.scaled_car_images = []
         self.load_images(path)
+        self.car_scale = Vector(64, 128)
+        self.block_scale = Vector(256, 256)
 
     def load_images(self, path):
         pygame = self.pygame
@@ -175,10 +179,10 @@ class ImageProvider:
             cars += 1
         return cars
 
-    def scale(self, block_size, car_width, car_height):
+    def scale(self, block_width, block_height, car_width, car_height):
         self.scaled_images = []
         for image in self.original_images:
-            self.scaled_images.append(self.pygame.transform.scale(image, (block_size, block_size)))
+            self.scaled_images.append(self.pygame.transform.scale(image, (int(block_width), int(block_height))))
         self.scaled_car_images = []
         for image in self.original_car_images:
-            self.scaled_car_images.append(self.pygame.transform.scale(image, (car_width, car_height)))
+            self.scaled_car_images.append(self.pygame.transform.scale(image, (int(car_width), int(car_height))))

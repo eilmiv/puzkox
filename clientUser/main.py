@@ -57,7 +57,10 @@ if __name__ == "__main__":
 
     # scene state init
     images = ImageProvider(pygame, "Images")
-    images.scale(512, 32, 64)
+    images.scale(
+        *vew_window.screen_coordinates(images.block_scale).tuple(),
+        *vew_window.screen_coordinates(images.car_scale).tuple()
+    )
     scene = GameScene(vew_window, images)
 
     # init timing
@@ -84,7 +87,10 @@ if __name__ == "__main__":
                 running = False
             elif event.type == VIDEORESIZE:
                 vew_window.resize(event.dict['size'])
-                # rescale images
+                images.scale(
+                    *vew_window.screen_coordinates(images.block_scale).tuple(),
+                    *vew_window.screen_coordinates(images.car_scale).tuple()
+                )
             elif event.type == KEYDOWN:
                 handle_key(event.dict['unicode'])
 
