@@ -4,6 +4,8 @@ from time import time
 
 from clientUser.Communication import Communication
 from clientUser.ViewWindow import ViewWindow
+from clientUser.GameScene import GameScene
+from clientUser.ImageProvider import ImageProvider
 
 tobiasIP = "192.168.2.106"
 martinIP = "192.168.2.102"
@@ -14,16 +16,14 @@ if __name__ == "__main__":
     print("client")
 
     def handle_message(target, request, **content):
+        global ping
         if target == 'root':
             if request == 'test':
                 print("test-message: " + str(content['value']))
             elif request == 'ping-answer':
-                print("ping: {}".format(int((time() - content['time'])*1000)))
+                ping = "ping: {}".format(int((time() - content['time'])*1000))
         elif target == 'view_window':
             vew_window.handle(request, **content)
-
-    def update_everything():
-        pass
 
     def handle_key(key):
         v = ''
@@ -39,7 +39,9 @@ if __name__ == "__main__":
         if v:
             com.send('client', 'key_down', value=v)
 
+    # basic init
     pygame.init()
+    pygame.font.init()
     commanders = []
 
     # visual init
@@ -53,11 +55,25 @@ if __name__ == "__main__":
     com.send('client', 'size', width=vew_window.width, height=vew_window.height)
     com.flush()
 
+    # scene state init
+    images = ImageProvider(pygame, "Images")
+    images.scale(
+        *vew_window.screen_coordinates(images.block_scale).tuple(),
+        *vew_window.screen_coordinates(images.car_scale).tuple()
+    )
+    scene = GameScene(vew_window, images)
+
+    # init timing
     clock = pygame.time.Clock()
     running = True
     epoch = time()
     frame_count = 0
+    fps = ""
+    ping = ""
+    server_fps = ""
     com.send('root', 'ping', time=time())
+
+    # main loop
     while running:
         # server events
         while com.has_next():
@@ -70,7 +86,11 @@ if __name__ == "__main__":
                 pygame.quit()
                 running = False
             elif event.type == VIDEORESIZE:
-                vew_window.resize(event.dict['size'], pygame)
+                vew_window.resize(event.dict['size'])
+                images.scale(
+                    *vew_window.screen_coordinates(images.block_scale).tuple(),
+                    *vew_window.screen_coordinates(images.car_scale).tuple()
+                )
             elif event.type == KEYDOWN:
                 handle_key(event.dict['unicode'])
 
@@ -83,12 +103,13 @@ if __name__ == "__main__":
             clock.tick(100)
             frame_count += 1
             if time() - epoch > 10:
-                print("{} fps".format(round(frame_count / (time() - epoch), 2)))
+                fps = "{} fps".format(round(frame_count / (time() - epoch), 2))
                 epoch = time()
                 frame_count = 0
                 com.send('root', 'ping', time=time())
-
+                print(vew_window.location)
 
             vew_window.clear()
-            update_everything()
+            scene.update()
+            vew_window.status_text("{}\n{}\n{}".format(fps, ping, server_fps))
             vew_window.update(pygame)
