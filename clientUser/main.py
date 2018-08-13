@@ -36,6 +36,8 @@ if __name__ == "__main__":
             vew_window.handle(request, **content)
         elif target == 'image_provider':
             images.handle(request, **content)
+        elif target == 'scene':
+            scene.handle(**content)
 
     def handle_key(key):
         v = ''

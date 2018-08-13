@@ -38,6 +38,9 @@ class Vector:
     def tuple(self):
         return self.x, self.y
 
+    def rotate90(self):
+        return Vector(-self.y, self.x)
+
 
 
 
