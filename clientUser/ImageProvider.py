@@ -15,8 +15,8 @@ class ImageProvider:
         self.original_car_images = []
         self.scaled_car_images = []
         self.load_images(path)
-        self.car_scale = Vector(64, 128)
-        self.block_scale = Vector(256, 256)
+        self.car_scale = Vector(0.25, 0.5)
+        self.block_scale = Vector(1, 1)
 
     def load_images(self, path):
         pygame = self.pygame
@@ -186,3 +186,8 @@ class ImageProvider:
         self.scaled_car_images = []
         for image in self.original_car_images:
             self.scaled_car_images.append(self.pygame.transform.scale(image, (int(car_width), int(car_height))))
+
+    def handle(self, request, **content):
+        if request == "sizes":
+            self.car_scale = Vector(content['car_x'], content['car_y'])
+            self.block_scale = Vector(content['block_x'], content['block_y'])

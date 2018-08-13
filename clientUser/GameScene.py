@@ -7,4 +7,4 @@ class GameScene:
         self.images = images
 
     def update(self):
-        self.canvas.draw_image(self.images.get_street(north=True, east=True, south=True, west=True), Vector(128, 128))
+        self.canvas.draw_image(self.images.get_street(north=True, east=True, south=True, west=True), Vector(0.5, 0.5))

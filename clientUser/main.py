@@ -6,6 +6,7 @@ from clientUser.Communication import Communication
 from clientUser.ViewWindow import ViewWindow
 from clientUser.GameScene import GameScene
 from clientUser.ImageProvider import ImageProvider
+from Vector import Vector
 
 tobiasIP = "192.168.2.106"
 martinIP = "192.168.2.102"
@@ -17,13 +18,24 @@ if __name__ == "__main__":
 
     def handle_message(target, request, **content):
         global ping
+        global server_fps
         if target == 'root':
             if request == 'test':
                 print("test-message: " + str(content['value']))
             elif request == 'ping-answer':
                 ping = "ping: {}".format(int((time() - content['time'])*1000))
+            elif request == 'server-fps':
+                server_fps = "server: {} fps".format(content['fps'])
+            elif request == 'size':
+                vew_window.game_size = Vector(content['x'], content['y'])
+                images.scale(
+                    *vew_window.screen_coordinates(images.block_scale).tuple(),
+                    *vew_window.screen_coordinates(images.car_scale).tuple()
+                )
         elif target == 'view_window':
             vew_window.handle(request, **content)
+        elif target == 'image_provider':
+            images.handle(request, **content)
 
     def handle_key(key):
         v = ''

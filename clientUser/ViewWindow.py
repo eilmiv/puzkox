@@ -6,7 +6,7 @@ class ViewWindow(Commander):
     def __init__(self):
         super(ViewWindow, self).__init__()
         self.location = Vector()
-        self.game_size = Vector(500, 300)
+        self.game_size = Vector(5, 5)
         self.width = 500
         self.height = 300
         self.display = None
@@ -45,7 +45,8 @@ class ViewWindow(Commander):
         pygame.display.update()
 
     def screen_coordinates(self, vec):
-        return Vector(vec.x / self.game_size.x * self.width, vec.y / self.game_size.y * self.height)
+        res = Vector(vec.x / self.game_size.x * self.width, vec.y / self.game_size.y * self.height)
+        return res
 
     def draw_image(self, image, pos):
         rect = image.get_rect()
