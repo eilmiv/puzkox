@@ -24,8 +24,6 @@ if __name__ == "__main__":
             epoch = time()
 
         for client in com.clients:
-            if client.player is None:
-                Player(Vector(), False, 0, )
 
             while client.has_message():
                 message = client.pop()
