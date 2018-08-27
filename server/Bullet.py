@@ -11,5 +11,5 @@ class Bullet(GameObject):
 
     def vertices(self):
         for ang in range(8):
-            my_ang = ang * math.pi / 8
+            my_ang = ang * math.pi / 4
             yield self.position + Vector(math.cos(my_ang), math.sin(my_ang)) * self.radius

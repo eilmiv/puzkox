@@ -11,7 +11,7 @@ from Vector import Vector
 tobiasIP = "192.168.2.106"
 martinIP = "192.168.2.102"
 
-useIP = tobiasIP
+useIP = "192.168.137.74"
 
 if __name__ == "__main__":
     print("client")
@@ -37,7 +37,7 @@ if __name__ == "__main__":
         elif target == 'image_provider':
             images.handle(request, **content)
         elif target == 'scene':
-            scene.handle(**content)
+            scene.handle(request, **content)
 
     def handle_key(key):
         v = ''
