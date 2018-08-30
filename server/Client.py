@@ -3,7 +3,8 @@ from threading import Thread
 from Vector import Vector
 import json
 import math
-from server import options
+#from server import options
+Player_size = Vector(0.25, 0.5)
 
 
 class Client:
@@ -17,7 +18,7 @@ class Client:
         self.position = Vector(0,0)
         self.send_message = b""
         self.size = Vector()
-        self.send("image_provider", "sizes", block_x=1, block_y=1, Player_size.x, car_y=0.5)
+        self.send("image_provider", "sizes", block_x=1, block_y=1, car_x=Player_size.x, car_y=0.5)
         self.player=None
 
         self.thread = Thread(target=self.communicate)
@@ -91,5 +92,6 @@ class Client:
     def send_coordinates(self):
         self.send("view_window", "update", key="location", x=self.position.x, y=self.position.y)
 
-
+    def update(self, colliding, delta):
+        pass
 

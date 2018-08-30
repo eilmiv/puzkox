@@ -8,6 +8,7 @@ class GameObject:
         self.exist = True
         self.updating = True
         self.current_chunk = None
+        # game object id
 
     @property
     def position(self):
