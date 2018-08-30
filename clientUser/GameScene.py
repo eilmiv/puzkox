@@ -10,19 +10,33 @@ class GameScene:
 
     def update(self):
         for game_object in self.game_objects.values():
-            texture = game_object.texture
-            if texture == 'car':
-                self.canvas.draw_image(self.images.get_car(game_object.angle, game_object.version, game_object.damage),
-                                       game_object.location)
-            elif texture == 'grass':
-                self.canvas.draw_image(self.images.get_grass(game_object.biome, game_object.version),
-                                       game_object.location)
-            elif texture == 'house':
-                self.canvas.draw_image(self.images.get_house(game_object.biome, game_object.version, game_object.damage),
-                                       game_object.location)
-            elif texture == 'street':
-                self.canvas.draw_image(self.images.get_street(game_object.biome, game_object.version, game_object.directions),
-                                       game_object.location)
+            if not game_object.foreground:
+                self.update_game_object(game_object)
+        for game_object in self.game_objects.values():
+            if game_object.foreground:
+                self.update_game_object(game_object)
+
+    def update_game_object(self, game_object):
+        texture = game_object.texture
+        if texture == 'car':
+            self.canvas.draw_image(self.images.get_car(game_object.angle, game_object.version, game_object.damage),
+                                   game_object.location)
+        elif texture == 'grass':
+            self.canvas.draw_image(self.images.get_grass(game_object.biome, game_object.version),
+                                   game_object.location)
+        elif texture == 'house':
+            self.canvas.draw_image(self.images.get_house(game_object.biome, game_object.version, game_object.damage),
+                                   game_object.location)
+        elif texture == 'street':
+            self.canvas.draw_image(
+                self.images.get_street(game_object.biome, game_object.version, game_object.directions),
+                game_object.location)
+
+        elif texture == 'bullet':
+            self.canvas.draw_cicle(game_object.r, (0, 0, 0), game_object.location)
+
+        elif texture == 'bullet':
+            self.canvas.draw_cicle(game_object.r, (0, 255, 255), game_object.location)
 
     def handle(self, request, **content):
         if request == 'update':

@@ -50,8 +50,16 @@ class ViewWindow(Commander):
 
     def draw_image(self, image, pos):
         rect = image.get_rect()
-        rect.center = self.screen_coordinates(pos-self.location).tuple()
+        v = self.screen_coordinates(pos-self.location)
+        v.y = self.height - v.y
+        rect.center = v.tuple()
         self.display.blit(image, rect)
+
+    def draw_circle(self, r, color, pos):
+        v = self.screen_coordinates(pos - self.location)
+        v.y = self.height - v.y
+        r *= (self.width / self.game_size.x + self.height / self.game_size.y) / 2
+        self.pygame.draw.circle(self.display, color, pos, r)
 
     def status_text(self, text):
         if self.font:

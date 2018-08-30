@@ -32,13 +32,19 @@ class Communication:
 
     def flush(self):
         if self.send_message != b'':
-            self.socket.send(self.send_message)
-            #print(self.send_message)
+            try:
+                self.socket.send(self.send_message)
+            except ConnectionResetError:
+                print("C C")
+            # print(self.send_message)
             self.send_message = b''
 
     def receive(self):
         while True:
-            msg = self.socket.recv(8191)
+            try:
+                msg = self.socket.recv(8191)
+            except ConnectionResetError:
+                print("Connection Closed")
             if msg:
                 self.stream.append(msg)
                 while self.stream.has_next():

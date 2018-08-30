@@ -39,19 +39,19 @@ if __name__ == "__main__":
         elif target == 'scene':
             scene.handle(request, **content)
 
-    def handle_key(key):
+    def handle_key(key, is_down):
         v = ''
-        if key == 'w':
+        if key == 119:
             v = 'forward'
-        elif key == 'a':
+        elif key == 97:
             v = 'left'
-        elif key == 's':
+        elif key == 115:
             v = 'backward'
-        elif key == 'd':
+        elif key == 100:
             v = 'right'
 
         if v:
-            com.send('client', 'key_down', value=v)
+            com.send('client', 'key', value=v, is_down=is_down)
 
     # basic init
     pygame.init()
@@ -106,7 +106,11 @@ if __name__ == "__main__":
                     *vew_window.screen_coordinates(images.car_scale).tuple()
                 )
             elif event.type == KEYDOWN:
-                handle_key(event.dict['unicode'])
+                handle_key(event.dict['key'], True)
+                if event.dict['unicode'] == 'p':
+                    print(scene.game_objects[100].location)
+            elif event.type == KEYUP:
+                handle_key(event.dict['key'], False)
 
         # send messages
         for commander in commanders:
@@ -121,7 +125,6 @@ if __name__ == "__main__":
                 epoch = time()
                 frame_count = 0
                 com.send('root', 'ping', time=time())
-                print(vew_window.location)
 
             vew_window.clear()
             scene.update()
