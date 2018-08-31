@@ -11,7 +11,7 @@ from Vector import Vector
 tobiasIP = "192.168.2.106"
 martinIP = "192.168.2.102"
 
-useIP = "192.168.137.74"
+useIP = "localhost"
 
 if __name__ == "__main__":
     print("client")
