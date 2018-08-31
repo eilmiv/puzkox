@@ -3,14 +3,16 @@ import server.options as optoins
 
 
 class GameObject:
+    gameobject_count = 0
+
     def __init__(self, position, description=""):
         self.position = position
         self.description = description
         self.exist = True
         self.updating = True
         self.current_chunk = None
-        self.id = optoins.gameobject_count
-        optoins.gameobject_count += 1
+        self.id = GameObject.gameobject_count
+        GameObject.gameobject_count += 1
 
     def delete_from_chunk(self):
         if self.current_chunk and self in self.current_chunk.content:

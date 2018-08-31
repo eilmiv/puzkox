@@ -8,6 +8,5 @@ bullet_damage   = 4
 bullet_radius   = 0.1
 bullet_speed    = 7
 
-gameobject_count= 0
 time_house      = 20
 
