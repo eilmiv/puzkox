@@ -50,7 +50,9 @@ class ViewWindow(Commander):
 
     def draw_image(self, image, pos):
         rect = image.get_rect()
-        rect.center = self.screen_coordinates(pos-self.location).tuple()
+        v = self.screen_coordinates(pos-self.location)
+        v.y = self.height - v.y
+        rect.center = v.tuple()
         self.display.blit(image, rect)
 
     def status_text(self, text):

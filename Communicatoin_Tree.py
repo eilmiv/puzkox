@@ -1,6 +1,7 @@
 #server --> client
 root
     size
+    ping-answer
 view_window     = "view_window"
 image_provider  = "image_provider"
 

@@ -14,5 +14,5 @@ class Square(GameObject):
         return Vector(self.site_length, self.site_length)
 
     def vertices(self):
-        offsets = [Vector(1, 1), Vector(1, -1), Vector(-1, -1), Vector(-1, 1)]
-        return [self.position + offset * self.site_length for offset in offsets]
+        offsets = [Vector(1, 1), Vector(-1, 1), Vector(-1, -1), Vector(1, -1)]
+        return [self.position + offset * self.site_length * 0.5 for offset in offsets]

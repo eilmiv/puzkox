@@ -3,8 +3,7 @@ from threading import Thread
 from Vector import Vector
 import json
 import math
-import server.options
-
+import server.options as options
 
 class Client:
     def __init__(self, socket, adr):
@@ -17,12 +16,14 @@ class Client:
         self.position = Vector(0,0)
         self.send_message = b""
         self.size = Vector()
-        self.send("image_provider", "sizes", block_x=1, block_y=1, car_x=server.options.Player_size.x, car_y=server.options.Player_size.y)
-        self.player=None
+        self.relative_size = Vector(1, 1)
+        self.send("image_provider", "sizes", block_x=1, block_y=1, car_x=options.player_size.x, car_y=options.player_size.y)
+        self.player = None
 
         self.thread = Thread(target=self.communicate)
         self.thread.daemon = True
         self.thread.start()
+
 
     def communicate(self):
         while True:
@@ -53,15 +54,32 @@ class Client:
 
             y = math.sqrt(self.area / a)
             x = a*y
-            print("y=",y)
-            print("x=",x)
-            print((x / y)/a)
+            #print("y=",y)
+            #print("x=",x)
+            #print((x / y)/a)
             self.send("view_window", "update", key="size", x=x, y=y)
             self.send("root", "size", x=x, y=y)
-        if request == "key_down":
-             print(message['value'])
+            self.relative_size = Vector(x, y)
+        if request == "key":
+            if self.player:
+                v=message["value"]
+                if v == "forward":
+                    self.player.forward = message['is_down']
+                if v == "backward":
+                    self.player.backward = message['is_down']
+                if v == "left":
+                    self.player.left = message['is_down']
+                if v == "right":
+                    self.player.right = message["is_down"]
+
+                if v == "bullet":
+                    if message ["is_down"]:
+                        self.player.shoot()
+
+            #print(message['value'])
         if request == "ping":
             self.send("root", "ping-answer", True, time=message["time"])
+
 
 
     def send(self, target, request, auto_flush=False, **kwargs):
@@ -90,6 +108,16 @@ class Client:
 
     def send_coordinates(self):
         self.send("view_window", "update", key="location", x=self.position.x, y=self.position.y)
+
+    def update(self, colliding, delta):
+        if self.player:
+            self.position = self.player.position-self.relative_size/2
+
+        for obj in colliding:
+            if obj.exist:
+                self.send("scene", "create", id=obj.id, **obj.serialize())
+
+
 
 
 
