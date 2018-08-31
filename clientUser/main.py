@@ -49,6 +49,8 @@ if __name__ == "__main__":
             v = 'backward'
         elif key == 100:
             v = 'right'
+        elif key == 32:
+            v = 'bullet'
 
         if v:
             com.send('client', 'key', value=v, is_down=is_down)
@@ -86,6 +88,7 @@ if __name__ == "__main__":
     ping = ""
     server_fps = ""
     com.send('root', 'ping', time=time())
+    print_key = False
 
     # main loop
     while running:
@@ -107,10 +110,25 @@ if __name__ == "__main__":
                 )
             elif event.type == KEYDOWN:
                 handle_key(event.dict['key'], True)
+                if print_key:
+                    print("key: ", event.dict['key'])
+                    print_key = False
                 if event.dict['unicode'] == 'p':
                     print(scene.game_objects[100].location)
+                    print_key = True
             elif event.type == KEYUP:
                 handle_key(event.dict['key'], False)
+            elif event.type == MOUSEMOTION:
+                # print(event.dict['buttons'])
+                pos = Vector(*event.dict['pos'])
+                pos = vew_window.game_coordinates(pos)
+                com.send('player', 'mouse_move', x=pos.x, y=pos.y)
+            elif event.type == MOUSEBUTTONUP:
+                # print(event.dict['pos'])
+                pass
+            elif event.type == MOUSEBUTTONDOWN:
+                # print(event.dict['button'])
+                pass
 
         # send messages
         for commander in commanders:

@@ -33,9 +33,9 @@ class GameScene:
                 game_object.location)
 
         elif texture == 'bullet':
-            self.canvas.draw_cicle(game_object.r, (0, 0, 0), game_object.location)
+            self.canvas.draw_circle(game_object.r, (0, 0, 0), game_object.location)
 
-        elif texture == 'bullet':
+        elif texture == 'bullet_charged':
             self.canvas.draw_cicle(game_object.r, (0, 255, 255), game_object.location)
 
     def handle(self, request, **content):
@@ -50,3 +50,6 @@ class GameScene:
                 self.game_objects[obj_id].texture = content['texture']
         elif request == 'create':
             self.game_objects[content['id']] = GameObject(**content)
+        elif request == 'delete':
+            if content['id'] in self.game_objects:
+                del self.game_objects[content['id']]

@@ -44,6 +44,10 @@ class ViewWindow(Commander):
     def update(self, pygame):
         pygame.display.update()
 
+    def game_coordinates(self, vec):
+        vec.y = self.height - vec.y
+        return Vector(vec.x * self.game_size.x / self.width, vec.y * self.game_size.y / self.height)
+
     def screen_coordinates(self, vec):
         res = Vector(vec.x / self.game_size.x * self.width, vec.y / self.game_size.y * self.height)
         return res
@@ -59,7 +63,7 @@ class ViewWindow(Commander):
         v = self.screen_coordinates(pos - self.location)
         v.y = self.height - v.y
         r *= (self.width / self.game_size.x + self.height / self.game_size.y) / 2
-        self.pygame.draw.circle(self.display, color, pos, r)
+        self.pygame.draw.circle(self.display, color, (round(v.x), round(v.y)), round(r))
 
     def status_text(self, text):
         if self.font:
