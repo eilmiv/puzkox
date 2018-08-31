@@ -29,6 +29,9 @@ class Communication:
         for client in self.clients:
             client.send(target, request, auto_flush, **kwargs)
 
+    def clean(self):
+        self.clients = list(filter(lambda client: client.exist, self.clients))
+
 
 
 

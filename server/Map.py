@@ -2,6 +2,9 @@ from Vector import Vector
 from server.Chunk import Chunk
 from time import time
 import math
+from server.Meadow import Meadow
+from server.Street import Street
+from server.House import House
 
 
 class Map:
@@ -12,22 +15,30 @@ class Map:
         for x in range(width):
             self.rows.append([])
             for y in range(height):
-                self.rows[-1].append(Chunk(Vector(x, y)))
+                chunk = Chunk(Vector(x, y))
+                if (x+y) % 2:
+                    chunk.content.append(House(Vector(x, y)))
+                else:
+                    chunk.content.append(Street(Vector(x, y)))
+                self.rows[-1].append(chunk)
+
         self.game_objects_slow = []
         self.game_objects = []
         self.time_slow = time()
 
-    def update(self, delta):
-        self.update_cycle(self.game_objects, delta / 1000)
-        self.game_objects = filter(lambda obj: obj.updating, self.game_objects)
 
-    def update_slow(self):
+
+    def update(self, delta, communication):
+        self.update_cycle(self.game_objects, delta / 1000, communication)
+        self.game_objects = list(filter(lambda obj: obj.updating, self.game_objects))
+
+    def update_slow(self, communication):
         delta = time() - self.time_slow
         self.time_slow = time()
-        self.update_cycle(self.game_objects_slow, delta)
-        self.game_objects_slow = filter(lambda obj: obj.updating, self.game_objects_slow)
+        self.update_cycle(self.game_objects_slow, delta, communication)
+        self.game_objects_slow = list(filter(lambda obj: obj.updating, self.game_objects_slow))
 
-    def update_cycle(self, object_list, delta):
+    def update_cycle(self, object_list, delta, communication):
         for game_object in object_list:
             game_object.move(delta)
             x, y = self.update_chunk(game_object)
@@ -42,6 +53,9 @@ class Map:
             game_object.update(colliding)
             if not game_object.exist:
                 game_object.updating = False
+                communication.send_all('scene', 'delete', id=game_object.id)
+                game_object.delete_from_chunk()
+
 
     def add(self, obj):
         if obj not in self.game_objects:

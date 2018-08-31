@@ -1,22 +1,22 @@
 import Vector
+import server.options as optoins
 
 
 class GameObject:
     def __init__(self, position, description=""):
-        self._position = position
+        self.position = position
         self.description = description
         self.exist = True
         self.updating = True
         self.current_chunk = None
-        # game object id
+        self.id = optoins.gameobject_count
+        optoins.gameobject_count += 1
 
-    @property
-    def position(self):
-        return self._position
+    def delete_from_chunk(self):
+        if self.current_chunk and self in self.current_chunk.content:
+            self.current_chunk.content.remove(self)
 
-    @position.setter
-    def set_position (self, new_position):
-        self._position = new_position
+
 
     def vertices(self):
         return []
@@ -50,6 +50,10 @@ class GameObject:
 
     def update(self, colliding):
         self.updating = False
+
+    def serialize(self):
+        print("ACchtung !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        return {}
 
 #position
 #hitbox

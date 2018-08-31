@@ -1,9 +1,9 @@
 from server.Communication import Communication
 from time import sleep, time
 import pygame
-from server import Player
-import Vector
+from Vector import Vector
 from server.Map import Map
+from server.Player import Player
 
 if __name__ == "__main__":
     print("server")
@@ -32,6 +32,7 @@ if __name__ == "__main__":
                 client.player = Player(Vector(), 0)
                 client.player.client = client
                 world.add(client.player)
+                client.player.world = world
 
             while client.has_message():
                 message = client.pop()
@@ -42,13 +43,14 @@ if __name__ == "__main__":
                 if message["target"] == "root":
                     client.handle_event(**message)
 
-        world.update(delta)
+        world.update(delta, com)
 
         # update clients
         for client in com.clients:
             world.update_client(client, delta)
 
         # sending
+        com.clean()
         for client in com.clients:
             client.send_coordinates()
             client.flush()

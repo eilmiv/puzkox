@@ -13,6 +13,6 @@ class Chunk:
     def transfer(self, obj):
         if obj.current_chunk != self:
             if obj.current_chunk:
-                obj.current_chunk.remove()
+                obj.current_chunk.remove(obj)
             self.content.append(obj)
             obj.current_chunk = self
